@@ -1,0 +1,92 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.actions.act_window" id="bl_monitor.action_window">
+      <field name="name">bl_monitor window</field>
+      <field name="res_model">stock.picking</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{"search_default_bl":1}</field>
+    </record> 
+    
+    <!-- model.name form view -->
+    <record id="bl_monitor_inherit" model="ir.ui.view">
+      <field name="name">stock.picking.inherit</field>
+      <field name="model">stock.picking</field>
+      <field name="inherit_id" ref="stock.view_picking_form"/>
+      <field name="arch" type="xml">
+        <button name="action_cancel" position="after">
+          <button string="CLICK IT" name="rien" type="object" class="oe_highlight"/>
+        </button>
+      
+          <field name="picking_type_id" position="after">
+            <field name="valeur" />
+          </field>
+        
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="bl_monitor.list">
+      <field name="name">bl_monitor list</field>
+      <field name="model">stock.picking</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="library_book_view_search" model="ir.ui.view">
+        <field name="name">BL Search</field>
+        <field name="model">stock.picking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter string="Bon de livraison" name="bl" domain="[('picking_type_code','=','outgoing')]"/>
+            </search>
+        </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+   
+
+
+    <!-- server action to the one above -->
+
+    <record model="ir.actions.server" id="bl_monitor.action_server">
+      <field name="name">bl_monitor server</field>
+      <field name="model_id" ref="model_bl_monitor_bl_monitor"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+
+
+    <!-- Top menu item -->
+
+    <menuitem name="bl_monitor" id="bl_monitor.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Menu 1" id="bl_monitor.menu_1" parent="bl_monitor.menu_root"/>
+    <menuitem name="Menu 2" id="bl_monitor.menu_2" parent="bl_monitor.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="List" id="bl_monitor.menu_1_list" parent="bl_monitor.menu_1"
+              action="bl_monitor.action_window"/>
+    <menuitem name="Server to list" id="bl_monitor" parent="bl_monitor.menu_2"
+              action="bl_monitor.action_server"/>
+
+     
+
+  </data>
+</odoo>
