@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="stock_picking_tree_view" model="ir.ui.view">
+            <field name="name">stock.picking.tree.inherit</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree/field[@name='state']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <field name="state" position="after">
+                    <field name="custom_state" optional="show" widget="badge" decoration-success="custom_state == 'livre'" decoration-info="custom_state  == 'pret'" decoration-muted="custom_state == 'encours'"/>
+                </field>
+                <field name="custom_state" position="before">
+                    <field name="state_paye" widget="" />
+                </field>
+            </field>
+        </record>
+
+
+        <record id="stock_picking_act_window" model="ir.actions.act_window">
+            <field name="name">BL Monitoring</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Bon de Livraison
+                </p>
+            </field>
+        </record>
+        <menuitem name="BL Monitoring" id="custom_stock.menu_root"
+                  web_icon="custom_stock,static/description/icon.png"/>
+        <menuitem name="Bon de livraison" id="custom_stock.menu_1"
+                  parent="custom_stock.menu_root" action="stock_picking_act_window"/>
+
+    </data>
+</odoo>
